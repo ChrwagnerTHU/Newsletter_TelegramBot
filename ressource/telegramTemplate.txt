@@ -1,0 +1,9 @@
+
+<b>👋 Guten Morgen $name!</b>
+Heute ist <b>$dow, der $date_today</b>
+
+$weatherTemplate
+$appointmentsTemplate
+$eventsTemplate
+$dishTemplate
+$wikiTemplate

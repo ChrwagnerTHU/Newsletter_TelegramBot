@@ -1,2 +1,2 @@
-# Newsletter_TelegramBot
-Telegram Bot which creats a daily newsletter
+# Daily_Newsletter
+This repository contains some python scripts to assemble a personalized newsletter.

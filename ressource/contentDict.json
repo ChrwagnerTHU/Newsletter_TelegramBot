@@ -1,0 +1,8 @@
+{
+    "WEATHER": "<b>🌤 Wetter in $location:</b>\n🌡 Durchschnitt: $temp°C\n🔺 Max: $max°C  🔻 Min: $min°C\n🥵 Gefühlte Temp: $feels°C\n📝 Zustand: $desc\n",
+    "STOCK": "<b>📈 Aktienkurse:</b>\n$stockDev\n",
+    "CALENDAR": "<b>📅 Termine für heute:</b>\n$appointmentsToday\n",
+    "WIKI": "<b>📚 Wikipedia-Artikel des Tages:</b>\n<a href=\"$wikiUrl\">$wikiText</a>\n",
+    "EVENTS": "<b>🎭 Events heute in $location:</b>\n$eventsToday\n",
+    "DISH": "<b>🍽 Essensvorschlag:</b>\n<a href=\"$dishUrl\">$dishText</a>\n📷 Bild: $dishImg\n"
+}

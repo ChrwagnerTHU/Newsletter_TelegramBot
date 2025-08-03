@@ -1,0 +1,6 @@
+{
+    "TOKEN": "PROD_TOKEN",
+    "TOKEN_DEV": "DEV_TOKEN",
+    "WEATHER_API": "OWM_TOKEN"
+}
+
