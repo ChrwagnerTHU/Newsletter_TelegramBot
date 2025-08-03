@@ -1,2 +1,4 @@
 __pycache__/
 venv
+user_configs
+utilities/configs/config.json
