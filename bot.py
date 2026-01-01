@@ -49,6 +49,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "/register – Konfiguration neu anlegen\n"
         "/edit – Bestehende Konfiguration bearbeiten\n"
         "/newsletter – Newsletter sofort erhalten\n"
+        "/pause – Automatischen Newsletter pausieren\n"
+        "/resume – Automatischen Newsletter fortsetzen\n"
         "/cancel – Abbrechen eines laufenden Vorgangs",
         parse_mode="HTML"
     )
@@ -111,10 +113,42 @@ async def send_newsletter_command(update: Update, context: ContextTypes.DEFAULT_
     except Exception as e:
         await update.message.reply_text(f"❌ Fehler beim Senden des Newsletters:\n{e}")
 
+async def pause_newsletter(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = str(update.effective_user.id)
+    config = config_manager.lade_config(user_id)
+    if not config:
+        await update.message.reply_text("⚠️ Keine Konfiguration gefunden. Bitte nutze zuerst /register.")
+        return
+
+    if config.get("paused"):
+        await update.message.reply_text("⏸️ Dein Newsletter ist bereits pausiert.")
+        return
+
+    config["paused"] = True
+    config_manager.speichere_config(user_id, config)
+    await update.message.reply_text("⏸️ Newsletter pausiert. Du erhältst keine automatischen Sendungen.")
+
+async def resume_newsletter(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = str(update.effective_user.id)
+    config = config_manager.lade_config(user_id)
+    if not config:
+        await update.message.reply_text("⚠️ Keine Konfiguration gefunden. Bitte nutze zuerst /register.")
+        return
+
+    if not config.get("paused"):
+        await update.message.reply_text("▶️ Dein Newsletter ist bereits aktiv.")
+        return
+
+    config["paused"] = False
+    config_manager.speichere_config(user_id, config)
+    await update.message.reply_text("▶️ Newsletter fortgesetzt. Du erhältst wieder automatische Sendungen.")
+
 def schedule_jobs(application):
     async def job():
         for chat_id in config_manager.get_all_user_ids():
             config = config_manager.lade_config(chat_id)
+            if not config or config.get("paused"):
+                continue
             content = send_newsletter(config)
             messages = split_message(content)
             for part in messages:
@@ -137,6 +171,8 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("newsletter", send_newsletter_command))
+    app.add_handler(CommandHandler("pause", pause_newsletter))
+    app.add_handler(CommandHandler("resume", resume_newsletter))
 
     register_conv = ConversationHandler(
         entry_points=[CommandHandler("register", start_add)],
